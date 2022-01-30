@@ -30,13 +30,15 @@ Route::get('/login', [LoginAndLogoutController::class, 'index'])->name('login');
 Route::post('/login', [LoginAndLogoutController::class, 'login'])->name('login');
 Route::post('/logout', [LoginAndLogoutController::class, 'logout'])->name('logout');
 
-Route::get('/user/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/user/{id}/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 Route::prefix('/admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin');
-    Route::get('/users', [AdminController::class, 'showusers'])->name('admin.showusers');
-    Route::post('/deleteuser/{id}', [AdminController::class, 'deleteuser'])->name('admin.deleteuser');
+    Route::middleware('auth')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin');
+        Route::get('/users', [AdminController::class, 'showusers'])->name('admin.showusers');
+        Route::post('/deleteuser/{id}', [AdminController::class, 'deleteuser'])->name('admin.deleteuser');
+    });
 
     Route::name('admin.')->group(function () {
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);

@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,6 +21,7 @@ class NewsController extends Controller
      */
     public function index()
     {
+        $this->authorize('do_admin_stuff', News::class);
         $news = News::latest()->paginate(12);
 
         return view('admin.news.shownews', compact('news'));
@@ -28,6 +34,9 @@ class NewsController extends Controller
      */
     public function create()
     {
+        $this->authorize('do_admin_stuff', News::class);
+
+
         return view('admin.news.showform');
     }
 
@@ -39,6 +48,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('do_admin_stuff', News::class);
         $request->validate([
             'title' => 'required|max:100',
             'text' => 'required|max:255',
@@ -84,6 +94,7 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('do_admin_stuff', News::class);
         $new = News::findOrFail($id);
 
         return view('admin.news.edit', compact('new'));
@@ -98,6 +109,7 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('do_admin_stuff', News::class);
         $request->validate([
             'title' => 'required|max:100',
             'text' => 'required|max:255',
@@ -139,6 +151,7 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('do_admin_stuff', News::class);
         News::destroy($id);
 
         return redirect()->route('admin.news.index')->with('status-delete', 'Новость успешно удалена');

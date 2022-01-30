@@ -12,7 +12,7 @@
     @yield('link-css')
     @yield('style-css')
 
-
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
     <title>Bostan - @yield('title')</title>
 </head>
 <body>
@@ -37,7 +37,7 @@
                                 </button>
                             </a>
                         @else
-                            <a href="{{ route('dashboard') }}" style="text-decoration: none;">
+                            <a href="{{ route('dashboard', auth()->user()->id) }}" style="text-decoration: none;">
                                 <button class="btn btn-link btn-outline-light m-2" style="text-decoration: none;">
                                     Профиль
                                 </button>

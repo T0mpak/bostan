@@ -11,8 +11,14 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
+        $this->authorize('do_admin_stuff', User::class);
         $users_count = User::all()->count();
         $plural_user = Str::plural('User', $users_count);
 
@@ -32,7 +38,9 @@ class AdminController extends Controller
         ]);
     }
 
-    public function showusers() {
+    public function showusers()
+    {
+        $this->authorize('do_admin_stuff', User::class);
         $users = User::paginate(12);
 
         return view('admin.showusers', [
@@ -40,7 +48,9 @@ class AdminController extends Controller
         ]);
     }
 
-    public function deleteuser($id) {
+    public function deleteuser($id)
+    {
+        $this->authorize('do_admin_stuff', User::class);
         if ($id == 1) {
             return abort(404);
         }
