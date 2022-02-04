@@ -21,19 +21,10 @@ class CommentController extends Controller
     public function index()
     {
         $this->authorize('do_admin_stuff', Comment::class);
+
         $comments = Comment::paginate(12);
 
         return view('admin.comment.showcomments',compact('comments'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //Empty
     }
 
     /**
@@ -58,17 +49,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //Empty
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -77,6 +57,7 @@ class CommentController extends Controller
     public function edit($id)
     {
         $this->authorize('do_admin_stuff', Comment::class);
+
         $comment = Comment::findOrFail($id);
 
         return view('admin.comment.edit', compact('comment'));
@@ -92,6 +73,7 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $this->authorize('do_admin_stuff', Comment::class);
+
         $request->validate([
             'body' => 'required|max:100',
         ]);
@@ -112,6 +94,7 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $this->authorize('do_admin_stuff', Comment::class);
+
         Comment::destroy($id);
 
         return redirect()->route('admin.comment.index')->with('status-delete', 'Комментарий успешно удален');

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.single');
 
 Route::get('/registration', [RegistrationController::class, 'index'])->name('registration');
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
@@ -42,11 +43,10 @@ Route::prefix('/admin')->group(function () {
 
     Route::name('admin.')->group(function () {
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
-    });
-
-    Route::name('admin.')->group(function () {
         Route::resource('comment', \App\Http\Controllers\Admin\CommentController::class);
     });
 });
+
+
 
 

@@ -11,7 +11,7 @@ class NewsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
+        $this->middleware('auth');
     }
 
     /**
@@ -22,6 +22,7 @@ class NewsController extends Controller
     public function index()
     {
         $this->authorize('do_admin_stuff', News::class);
+
         $news = News::latest()->paginate(12);
 
         return view('admin.news.shownews', compact('news'));
@@ -36,7 +37,6 @@ class NewsController extends Controller
     {
         $this->authorize('do_admin_stuff', News::class);
 
-
         return view('admin.news.showform');
     }
 
@@ -49,6 +49,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $this->authorize('do_admin_stuff', News::class);
+
         $request->validate([
             'title' => 'required|max:100',
             'text' => 'required|max:255',
@@ -79,11 +80,13 @@ class NewsController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('do_admin_stuff', News::class);
+
         $new = News::findOrFail($id);
-        $news_3 = News::latest()->take(3)->get();
+        $latest_5_news = News::latest()->take(5)->get();
         $comments = Comment::where('news_id', '=', $id)->latest()->get();
 
-        return view('news_single', compact('new', 'news_3', 'comments'));
+        return view('news_single', compact('new', 'latest_5_news', 'comments'));
     }
 
     /**
@@ -95,6 +98,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $this->authorize('do_admin_stuff', News::class);
+
         $new = News::findOrFail($id);
 
         return view('admin.news.edit', compact('new'));
@@ -110,6 +114,7 @@ class NewsController extends Controller
     public function update(Request $request, $id)
     {
         $this->authorize('do_admin_stuff', News::class);
+
         $request->validate([
             'title' => 'required|max:100',
             'text' => 'required|max:255',
@@ -152,6 +157,7 @@ class NewsController extends Controller
     public function destroy($id)
     {
         $this->authorize('do_admin_stuff', News::class);
+
         News::destroy($id);
 
         return redirect()->route('admin.news.index')->with('status-delete', 'Новость успешно удалена');

@@ -38,8 +38,10 @@
                         <p class="fs-5 mb-4">{{ $new->text }}</p>
                     </section>
                 </article>
+
                 <!-- Comments section-->
                 <section class="mb-5">
+                    @if($comments->count() or auth()->user())
                     <div class="card bg-light">
                         <div class="card-body">
                             <!-- Comment form-->
@@ -75,8 +77,10 @@
                             @endforeach
                         </div>
                     </div>
+                    @endif
                 </section>
             </div>
+
             <!-- Side widgets-->
             <div class="col-lg-4">
                 <!-- Categories widget-->
@@ -84,22 +88,17 @@
                     <div class="card-header">Последние новости</div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <ul class="list-unstyled mb-0">
-                                    @foreach($news_3 as $n3)
-                                        <li>
-                                            <i><a class="text-decoration-none" href="{{ route('admin.news.show', $n3->id) }}">{{ $n3->title }}</a></i>
+                                    @foreach($latest_5_news as $new)
+                                        <li class="my-1">
+                                            <i>* <a class="text-decoration-none" href="{{ route('admin.news.show', $new->id) }}">{{ $new->title }}</a></i>
                                         </li>
                                     @endforeach
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Side widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Temporary</div>
-                    <div class="card-body">{{ $new->text }}</div>
                 </div>
             </div>
         </div>
